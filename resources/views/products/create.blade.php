@@ -1,0 +1,127 @@
+@extends('layouts.app')
+
+@section('title', 'Ajouter produit')
+@section('page_title', 'Ajouter produit')
+@section('breadcrumb', 'Produits · Ajouter')
+
+@section('content')
+@php
+    $formatMoney = fn ($value) => number_format((float) $value, 2, ',', ' ') . ' DH';
+@endphp
+
+<div class="grid gap-6 lg:grid-cols-3">
+    <form method="POST" action="{{ route('products.store') }}" class="rounded-[12px] bg-white p-6 shadow lg:col-span-2">
+        @csrf
+        <div class="grid gap-4 md:grid-cols-2">
+            <div>
+                <label class="text-sm font-semibold">Nom du produit</label>
+                <input type="text" name="name" value="{{ old('name') }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm">
+                @error('name')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold">Catégorie</label>
+                <select name="category" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm">
+                    <option value="">Choisir</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>
+                    @endforeach
+                </select>
+                @error('category')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold">Quantité</label>
+                <input type="number" name="quantity" min="0" value="{{ old('quantity', 0) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="quantity">
+                @error('quantity')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold">Prix achat (par pièce)</label>
+                <input type="number" step="0.01" min="0" name="purchase_price" value="{{ old('purchase_price') }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="purchase_price">
+                @error('purchase_price')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold">Frais transport Casa→Berrechid</label>
+                <input type="number" step="0.01" min="0" name="transport_fees" value="{{ old('transport_fees', 0) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="transport_fees">
+                @error('transport_fees')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold">Autres frais</label>
+                <input type="number" step="0.01" min="0" name="other_fees" value="{{ old('other_fees', 0) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="other_fees">
+                @error('other_fees')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold">Prix de vente</label>
+                <input type="number" step="0.01" min="0" name="selling_price" value="{{ old('selling_price') }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="selling_price">
+                @error('selling_price')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <div class="md:col-span-2">
+                <label class="text-sm font-semibold">Notes</label>
+                <textarea name="notes" rows="3" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm">{{ old('notes') }}</textarea>
+                @error('notes')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+        </div>
+
+        <div class="mt-6 flex gap-3">
+            <a href="{{ route('products.index') }}" class="rounded-lg border border-[#E5E7EB] px-4 py-2 text-sm font-semibold">Annuler</a>
+            <button type="submit" class="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">Enregistrer</button>
+        </div>
+    </form>
+
+    <div class="rounded-[12px] bg-white p-6 shadow">
+        <h3 class="text-lg font-semibold">Aperçu des calculs</h3>
+        <div class="mt-4 space-y-3 text-sm">
+            <div class="flex justify-between"><span>Frais/unité</span><span id="fees_per_unit">-</span></div>
+            <div class="flex justify-between"><span>Prix de revient/unité</span><span id="cost_price">-</span></div>
+            <div class="flex justify-between"><span>Marge brute/pièce</span><span id="gross_margin">-</span></div>
+            <div class="flex justify-between"><span>Marge %</span><span id="margin_percentage" class="font-semibold">-</span></div>
+            <div class="flex justify-between"><span>Bénéfice total (100%)</span><span id="total_profit">-</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const fields = {
+        purchase_price: document.getElementById('purchase_price'),
+        quantity: document.getElementById('quantity'),
+        transport_fees: document.getElementById('transport_fees'),
+        other_fees: document.getElementById('other_fees'),
+        selling_price: document.getElementById('selling_price'),
+    };
+
+    const outputs = {
+        fees_per_unit: document.getElementById('fees_per_unit'),
+        cost_price: document.getElementById('cost_price'),
+        gross_margin: document.getElementById('gross_margin'),
+        margin_percentage: document.getElementById('margin_percentage'),
+        total_profit: document.getElementById('total_profit'),
+    };
+
+    const formatMoney = (value) => `${value.toLocaleString('fr-MA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} DH`;
+
+    function updatePreview() {
+        const purchase = parseFloat(fields.purchase_price.value) || 0;
+        const quantity = parseInt(fields.quantity.value || 0, 10);
+        const transport = parseFloat(fields.transport_fees.value) || 0;
+        const other = parseFloat(fields.other_fees.value) || 0;
+        const selling = parseFloat(fields.selling_price.value) || 0;
+
+        const feesPerUnit = quantity > 0 ? (transport + other) / quantity : 0;
+        const costPrice = purchase + feesPerUnit;
+        const grossMargin = selling - costPrice;
+        const marginPercentage = selling > 0 ? (grossMargin / selling) * 100 : 0;
+        const totalProfit = grossMargin * quantity;
+
+        outputs.fees_per_unit.textContent = formatMoney(feesPerUnit);
+        outputs.cost_price.textContent = formatMoney(costPrice);
+        outputs.gross_margin.textContent = formatMoney(grossMargin);
+        outputs.margin_percentage.textContent = `${marginPercentage.toFixed(1)}%`;
+        outputs.total_profit.textContent = formatMoney(totalProfit);
+
+        const marginColor = marginPercentage < 10 ? 'text-red-600' : (marginPercentage <= 25 ? 'text-orange-600' : 'text-green-600');
+        outputs.margin_percentage.className = `font-semibold ${marginColor}`;
+    }
+
+    Object.values(fields).forEach((field) => field.addEventListener('input', updatePreview));
+    updatePreview();
+</script>
+@endsection
+
