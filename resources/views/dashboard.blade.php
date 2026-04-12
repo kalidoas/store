@@ -8,6 +8,15 @@
 @php
     $formatMoney = fn ($value) => number_format((float) $value, 2, ',', ' ') . ' DH';
     $alertCount = $out_of_stock->count() + $low_stock->count();
+    $categoryStyles = [
+        'Téléphones' => 'bg-blue-100 text-blue-600',
+        'TV' => 'bg-purple-100 text-purple-600',
+        'Audio' => 'bg-green-100 text-green-600',
+        'Informatique' => 'bg-indigo-100 text-indigo-600',
+        'Électroménager' => 'bg-orange-100 text-orange-600',
+        'Accessoires' => 'bg-pink-100 text-pink-600',
+        'Autre' => 'bg-gray-100 text-gray-600',
+    ];
     $chartDataJson = $chart_products->map(fn ($product) => [
         'name' => $product->name,
         'margin' => round($product->margin_percentage, 1),
@@ -96,11 +105,18 @@
         <h2 class="text-lg font-semibold">Top rentabilité</h2>
         @if ($top_product)
             <div class="mt-4">
-                <p class="text-xl font-semibold">{{ $top_product->name }}</p>
-                <p class="mt-2 text-sm text-[#6B7280]">Catégorie</p>
-                <span class="mt-1 inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#2563EB]">
-                    {{ $top_product->category }}
-                </span>
+                <div class="flex items-center gap-2">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-[#2563EB]">
+                        <x-category-icon :category="$top_product->category" size="20" />
+                    </span>
+                    <div>
+                        <p class="text-xl font-semibold">{{ $top_product->name }}</p>
+                        <span class="mt-1 inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#2563EB]">
+                            <x-category-icon :category="$top_product->category" size="14" />
+                            {{ $top_product->category }}
+                        </span>
+                    </div>
+                </div>
                 <p class="mt-4 text-3xl font-semibold text-[#2563EB]">{{ number_format($top_product->margin_percentage, 1, ',', ' ') }}%</p>
                 <p class="text-sm text-[#6B7280]">Marge brute</p>
             </div>
@@ -144,6 +160,33 @@
     <h2 class="text-lg font-semibold">Top 6 marges par produit</h2>
     <canvas id="marginChart" class="mt-6 h-56 w-full"></canvas>
 </div>
+
+@if ($categories->isNotEmpty())
+    <div class="mt-8">
+        <h2 class="text-lg font-semibold">Catégories</h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            @foreach ($categories as $category)
+                @php
+                    $style = $categoryStyles[$category->category] ?? $categoryStyles['Autre'];
+                @endphp
+                <div class="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+                    <div class="flex items-center gap-4">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-full {{ $style }}">
+                            <x-category-icon :category="$category->category" size="24" />
+                        </div>
+                        <div>
+                            <p class="text-base font-semibold">{{ $category->category }}</p>
+                            <p class="text-sm text-[#6B7280]">{{ $category->count }} produit(s)</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-sm text-[#6B7280]">
+                        Marge moyenne: {{ number_format((float) $category->avg_margin, 1, ',', ' ') }}%
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
 
 <script>
     const chartData = {!! $chartDataJson !!};

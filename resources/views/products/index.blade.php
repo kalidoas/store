@@ -50,8 +50,9 @@
                 <tr data-product-row="{{ $product->id }}">
                     <td class="py-4">
                         <div class="font-semibold">{{ $product->name }}</div>
-                        <div class="mt-1 inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-[#2563EB]">
-                            {{ $product->category }}
+                        <div class="mt-1 inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-[#2563EB]">
+                            <x-category-icon :category="$product->category" size="14" />
+                            <span>{{ $product->category }}</span>
                         </div>
                     </td>
                     <td class="py-4">

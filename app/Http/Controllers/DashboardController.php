@@ -20,6 +20,9 @@ class DashboardController extends Controller
         $topProduct = $products->sortByDesc('margin_percentage')->first();
         $recentSales = Sale::with('product')->latest()->take(5)->get();
         $chartProducts = $products->sortByDesc('margin_percentage')->take(6)->values();
+        $categories = Product::selectRaw('category, count(*) as count, AVG((selling_price - purchase_price - ((transport_fees + other_fees) / NULLIF(quantity,1))) / NULLIF(selling_price,0) * 100) as avg_margin')
+            ->groupBy('category')
+            ->get();
 
         return view('dashboard', [
             'total_products' => $totalProducts,
@@ -30,6 +33,7 @@ class DashboardController extends Controller
             'top_product' => $topProduct,
             'recent_sales' => $recentSales,
             'chart_products' => $chartProducts,
+            'categories' => $categories,
         ]);
     }
 }

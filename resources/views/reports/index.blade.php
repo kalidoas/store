@@ -80,7 +80,10 @@
         @forelse ($category_breakdown as $category => $data)
             <div class="rounded-lg border border-[#E5E7EB] px-4 py-3">
                 <div class="flex items-center justify-between">
-                    <span class="font-semibold">{{ $category }}</span>
+                    <span class="flex items-center gap-2 font-semibold">
+                        <x-category-icon :category="$category" size="18" />
+                        {{ $category }}
+                    </span>
                     <span class="text-xs text-[#6B7280]">{{ $data['count'] }} produit(s)</span>
                 </div>
                 <p class="mt-2 text-sm text-[#6B7280]">Marge moyenne: {{ number_format($data['average_margin'], 1, ',', ' ') }}%</p>
