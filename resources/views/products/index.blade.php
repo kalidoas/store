@@ -11,7 +11,7 @@
 
 <div class="rounded-[12px] bg-white p-6 shadow">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <form class="flex flex-1 flex-wrap gap-3" method="GET" action="{{ route('products.index') }}">
+        <form class="flex flex-1 flex-wrap gap-2" method="GET" action="{{ route('products.index') }}">
             <input type="text" name="search" value="{{ $search }}" placeholder="Rechercher un produit..."
                    class="w-full rounded-lg border border-[#E5E7EB] px-4 py-2 text-sm focus:border-[#2563EB] focus:outline-none lg:w-1/3">
             <select name="category" class="rounded-lg border border-[#E5E7EB] px-4 py-2 text-sm focus:border-[#2563EB] focus:outline-none">
@@ -71,7 +71,7 @@
                             {{ $statusLabel }}
                         </span>
                     </td>
-                    <td class="py-4 text-right">
+                    <td class="py-4 text-right whitespace-nowrap">
                         <div class="flex items-center justify-end gap-2">
                             <a href="{{ route('products.edit', $product->id) }}" class="rounded-lg border border-[#E5E7EB] px-3 py-2 text-xs font-semibold text-[#2563EB]">Modifier</a>
                             <button type="button" class="sell-btn rounded-lg border border-green-200 px-3 py-2 text-xs font-semibold text-green-600" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}">Vendre</button>
@@ -86,12 +86,15 @@
             @empty
                 <tr>
                     <td class="py-10" colspan="8">
-                        <div class="flex flex-col items-center justify-center text-center text-sm text-[#6B7280]">
-                            <svg class="h-16 w-16 text-blue-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-                                <rect x="3" y="4" width="18" height="16" rx="2"/>
-                                <path d="M3 10h18"/>
-                            </svg>
-                            <p class="mt-3">Aucun produit. Ajoutez votre premier produit.</p>
+                        <div class="py-16 text-center">
+                            <div class="flex justify-center">
+                                <svg class="h-16 w-16 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356 0a1.5 1.5 0 011.492 1.356l.754 6.03A2.25 2.25 0 0117.119 20.25H6.88a2.25 2.25 0 01-2.233-2.364l.754-6.03A1.5 1.5 0 016.892 10.5h8.858z" />
+                                </svg>
+                            </div>
+                            <h3 class="mt-4 text-lg font-semibold text-gray-700">Aucun produit trouvé</h3>
+                            <p class="mt-2 text-sm text-gray-400">Commencez par ajouter votre premier produit au stock.</p>
+                            <a href="{{ route('products.create') }}" class="mt-6 inline-flex items-center justify-center rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">Ajouter un produit</a>
                         </div>
                     </td>
                 </tr>

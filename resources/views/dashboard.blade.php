@@ -23,9 +23,9 @@
     ])->values()->toJson();
 @endphp
 
-<div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-    <div class="rounded-[12px] bg-white p-5 shadow">
-        <div class="flex items-center justify-between">
+<div class="grid grid-cols-2 gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex min-h-[80px] items-center rounded-[12px] bg-white p-5 shadow">
+        <div class="flex w-full items-center justify-between">
             <div>
                 <p class="text-sm text-[#6B7280]">Total produits</p>
                 <p class="text-2xl font-semibold">{{ $total_products }}</p>
@@ -38,8 +38,8 @@
             </div>
         </div>
     </div>
-    <div class="rounded-[12px] bg-white p-5 shadow">
-        <div class="flex items-center justify-between">
+    <div class="flex min-h-[80px] items-center rounded-[12px] bg-white p-5 shadow">
+        <div class="flex w-full items-center justify-between">
             <div>
                 <p class="text-sm text-[#6B7280]">Valeur stock total</p>
                 <p class="text-2xl font-semibold">{{ $formatMoney($total_stock_value) }}</p>
@@ -52,8 +52,8 @@
             </div>
         </div>
     </div>
-    <div class="rounded-[12px] bg-white p-5 shadow">
-        <div class="flex items-center justify-between">
+    <div class="flex min-h-[80px] items-center rounded-[12px] bg-white p-5 shadow">
+        <div class="flex w-full items-center justify-between">
             <div>
                 <p class="text-sm text-[#6B7280]">Marge moyenne</p>
                 <p class="text-2xl font-semibold">{{ number_format($average_margin, 1, ',', ' ') }}%</p>
@@ -67,8 +67,8 @@
             </div>
         </div>
     </div>
-    <div class="rounded-[12px] bg-white p-5 shadow">
-        <div class="flex items-center justify-between">
+    <div class="flex min-h-[80px] items-center rounded-[12px] bg-white p-5 shadow">
+        <div class="flex w-full items-center justify-between">
             <div>
                 <p class="text-sm text-[#6B7280]">Alertes actives</p>
                 <p class="text-2xl font-semibold">{{ $alertCount }}</p>
@@ -84,7 +84,7 @@
 
 @if ($out_of_stock->isNotEmpty() || $low_stock->isNotEmpty())
     <div class="mt-8">
-        <h2 class="text-lg font-semibold">Alertes stock</h2>
+        <h2 class="mb-3 border-b pb-2 text-base font-semibold text-gray-700">Alertes stock</h2>
         <div class="mt-4 grid gap-4 md:grid-cols-2">
             @foreach ($out_of_stock as $product)
                 <div class="rounded-[12px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
@@ -102,7 +102,7 @@
 
 <div class="mt-8 grid gap-6 xl:grid-cols-3">
     <div class="rounded-[12px] bg-white p-6 shadow xl:col-span-1">
-        <h2 class="text-lg font-semibold">Top rentabilité</h2>
+        <h2 class="mb-3 border-b pb-2 text-base font-semibold text-gray-700">Top rentabilité</h2>
         @if ($top_product)
             <div class="mt-4">
                 <div class="flex items-center gap-2">
@@ -126,7 +126,7 @@
     </div>
 
     <div class="rounded-[12px] bg-white p-6 shadow xl:col-span-2">
-        <h2 class="text-lg font-semibold">Ventes récentes</h2>
+        <h2 class="mb-3 border-b pb-2 text-base font-semibold text-gray-700">Ventes récentes</h2>
         <div class="mt-4 overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="text-left text-[#6B7280]">
@@ -157,13 +157,13 @@
 </div>
 
 <div class="mt-8 rounded-[12px] bg-white p-6 shadow">
-    <h2 class="text-lg font-semibold">Top 6 marges par produit</h2>
+    <h2 class="mb-3 border-b pb-2 text-base font-semibold text-gray-700">Top 6 marges par produit</h2>
     <canvas id="marginChart" class="mt-6 h-56 w-full"></canvas>
 </div>
 
 @if ($categories->isNotEmpty())
     <div class="mt-8">
-        <h2 class="text-lg font-semibold">Catégories</h2>
+        <h2 class="mb-3 border-b pb-2 text-base font-semibold text-gray-700">Catégories</h2>
         <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             @foreach ($categories as $category)
                 @php
