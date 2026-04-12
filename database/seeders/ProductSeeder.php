@@ -12,6 +12,10 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        if (Product::count() > 0) {
+            return;
+        }
+
         Product::insert([
             [
                 'name' => 'iPhone 15 Pro',
@@ -64,4 +68,3 @@ class ProductSeeder extends Seeder
         ]);
     }
 }
-

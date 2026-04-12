@@ -31,11 +31,11 @@
             <tr>
                 <th class="pb-3">Produit</th>
                 <th class="pb-3">Quantité</th>
-                <th class="pb-3">Prix achat</th>
-                <th class="pb-3">Prix revient/unité</th>
+                <th class="pb-3 hidden md:table-cell">Prix achat</th>
+                <th class="pb-3 hidden md:table-cell">Prix revient/unité</th>
                 <th class="pb-3">Prix vente</th>
                 <th class="pb-3">Marge %</th>
-                <th class="pb-3">Statut</th>
+                <th class="pb-3 hidden md:table-cell">Statut</th>
                 <th class="pb-3 text-right">Actions</th>
             </tr>
             </thead>
@@ -57,15 +57,15 @@
                     <td class="py-4">
                         <span class="font-semibold {{ $quantityClass }}" data-quantity="{{ $product->id }}">{{ $product->quantity }}</span>
                     </td>
-                    <td class="py-4">{{ $formatMoney($product->purchase_price) }}</td>
-                    <td class="py-4">{{ $formatMoney($product->cost_price) }}</td>
+                    <td class="py-4 hidden md:table-cell">{{ $formatMoney($product->purchase_price) }}</td>
+                    <td class="py-4 hidden md:table-cell">{{ $formatMoney($product->cost_price) }}</td>
                     <td class="py-4">{{ $formatMoney($product->selling_price) }}</td>
                     <td class="py-4">
                         <span class="rounded-full px-2 py-1 text-xs font-semibold {{ $marginClass }}">
                             {{ number_format($product->margin_percentage, 1, ',', ' ') }}%
                         </span>
                     </td>
-                    <td class="py-4">
+                    <td class="py-4 hidden md:table-cell">
                         <span class="rounded-full px-2 py-1 text-xs font-semibold {{ $statusClass }}" data-status="{{ $product->id }}">
                             {{ $statusLabel }}
                         </span>
