@@ -9,7 +9,8 @@
 </head>
 <body class="bg-[#F9FAFB] text-[#111827] font-[system-ui,-apple-system,sans-serif]">
 <div class="min-h-screen">
-    <aside class="fixed left-0 top-0 h-full w-60 bg-white border-r border-[#E5E7EB] px-6 py-6">
+    <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-black/40 md:hidden"></div>
+    <aside id="sidebar" class="fixed left-0 top-0 z-50 h-full w-60 -translate-x-full bg-white border-r border-[#E5E7EB] px-6 py-6 transition-transform duration-200 md:translate-x-0">
         <div class="text-2xl font-bold text-[#2563EB]">Store</div>
         <nav class="mt-10 space-y-2 text-sm">
             <a href="{{ route('dashboard') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 transition {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-[#2563EB]' : 'text-[#6B7280] hover:text-[#2563EB]' }}">
@@ -48,17 +49,22 @@
         </div>
     </aside>
 
-    <main class="ml-60 min-h-screen">
-        <header class="sticky top-0 z-10 bg-[#F9FAFB]/80 backdrop-blur border-b border-[#E5E7EB] px-8 py-6">
+    <main class="ml-0 min-h-screen md:ml-60">
+        <header class="sticky top-0 z-10 bg-[#F9FAFB]/80 backdrop-blur border-b border-[#E5E7EB] px-6 py-4 md:px-8 md:py-6">
             <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-semibold">@yield('page_title', 'Tableau de bord')</h1>
-                    <p class="text-sm text-[#6B7280]">@yield('breadcrumb', 'Berrechid · Casablanca')</p>
+                <div class="flex items-center gap-3">
+                    <button id="sidebar-toggle" type="button" class="rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm text-[#111827] md:hidden" aria-controls="sidebar" aria-expanded="false">
+                        ☰
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-semibold">@yield('page_title', 'Tableau de bord')</h1>
+                        <p class="text-sm text-[#6B7280]">@yield('breadcrumb', 'Berrechid · Casablanca')</p>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <div class="px-8 py-8">
+        <div class="px-6 py-6 md:px-8 md:py-8">
             @if (session('success'))
                 <div class="flash-message mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
                     {{ session('success') }}
@@ -87,6 +93,45 @@
     flashMessages.forEach((message) => {
         setTimeout(() => message.remove(), 4000);
     });
+
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const toggleButton = document.getElementById('sidebar-toggle');
+
+    const isDesktop = () => window.innerWidth >= 768;
+
+    const openSidebar = () => {
+        if (!sidebar || !backdrop || isDesktop()) {
+            return;
+        }
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+        toggleButton?.setAttribute('aria-expanded', 'true');
+    };
+
+    const closeSidebar = () => {
+        if (!sidebar || !backdrop) {
+            return;
+        }
+        if (!isDesktop()) {
+            sidebar.classList.add('-translate-x-full');
+        } else {
+            sidebar.classList.remove('-translate-x-full');
+        }
+        backdrop.classList.add('hidden');
+        toggleButton?.setAttribute('aria-expanded', 'false');
+    };
+
+    toggleButton?.addEventListener('click', () => {
+        if (sidebar?.classList.contains('-translate-x-full')) {
+            openSidebar();
+        } else {
+            closeSidebar();
+        }
+    });
+
+    backdrop?.addEventListener('click', closeSidebar);
+    window.addEventListener('resize', closeSidebar);
 
     window.showToast = function (message, type = 'success') {
         const container = document.getElementById('toast-container');
