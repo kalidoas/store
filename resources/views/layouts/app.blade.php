@@ -10,31 +10,33 @@
 <body class="bg-[#F9FAFB] text-[#111827] font-[system-ui,-apple-system,sans-serif]">
 <div class="min-h-screen">
     <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-black/40 md:hidden"></div>
-    <aside id="sidebar" class="fixed left-0 top-0 z-50 h-full w-60 -translate-x-full bg-gray-900 border-r border-gray-800 px-6 py-6 transition-transform duration-200 md:translate-x-0">
-        <div class="text-xl font-bold text-white">Store</div>
-        <nav class="mt-10 space-y-2 text-sm">
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 transition {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-60 bg-gray-900 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="px-6 py-5 border-b border-gray-800">
+            <span class="text-white font-bold text-xl tracking-tight">Store</span>
+        </div>
+        <nav class="px-4 py-5 space-y-2 text-sm">
+            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium' : 'flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition text-sm font-medium' }}">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M3 12l9-9 9 9"/>
                     <path d="M9 21V9h6v12"/>
                 </svg>
                 Dashboard
             </a>
-            <a href="{{ route('products.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 transition {{ request()->routeIs('products.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium' : 'flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition text-sm font-medium' }}">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <rect x="3" y="4" width="18" height="16" rx="2"/>
                     <path d="M3 10h18"/>
                 </svg>
                 Produits
             </a>
-            <a href="{{ route('calculator.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 transition {{ request()->routeIs('calculator.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            <a href="{{ route('calculator.index') }}" class="{{ request()->routeIs('calculator.*') ? 'flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium' : 'flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition text-sm font-medium' }}">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <rect x="5" y="2" width="14" height="20" rx="2"/>
                     <path d="M8 6h8M8 10h8M8 14h2M12 14h2M16 14h2"/>
                 </svg>
                 Calculateur
             </a>
-            <a href="{{ route('reports.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 transition {{ request()->routeIs('reports.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium' : 'flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition text-sm font-medium' }}">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M4 19h16"/>
                     <path d="M6 16V8"/>
@@ -44,29 +46,23 @@
                 Rapport
             </a>
         </nav>
-        <div class="absolute bottom-6 left-6 text-xs text-gray-500">
-            {{ now()->format('d/m/Y') }}
+        <div class="px-6 py-4 border-t border-gray-800 mt-auto">
+            <p class="text-gray-500 text-xs">{{ now()->format('d/m/Y') }}</p>
         </div>
-    </aside>
+    </div>
 
     <main class="ml-0 min-h-screen md:ml-60">
-        <header class="sticky top-0 z-40 bg-white border-b border-[#E5E7EB] px-6 py-4 shadow-sm md:px-8 md:py-6">
-            <div class="flex items-center justify-between">
-                <div class="flex min-w-0 items-center gap-3">
-                    <button id="sidebar-toggle" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm transition hover:bg-gray-50 md:hidden" aria-controls="sidebar" aria-expanded="false">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="4" y1="6" x2="20" y2="6" />
-                            <line x1="4" y1="12" x2="20" y2="12" />
-                            <line x1="4" y1="18" x2="20" y2="18" />
-                        </svg>
-                    </button>
-                    <div class="min-w-0">
-                        <h1 class="truncate text-2xl font-medium text-gray-800">@yield('page_title', 'Tableau de bord')</h1>
-                        <p class="text-sm text-[#6B7280]">@yield('breadcrumb', 'Berrechid · Casablanca')</p>
-                    </div>
-                </div>
+        <div class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm flex items-center gap-4 px-4 py-3 md:ml-60">
+            <button id="sidebarToggle" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="22" height="22">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+            <div>
+                <h1 class="font-semibold text-gray-800 text-base leading-tight">@yield('title', 'Dashboard')</h1>
+                <p class="text-gray-400 text-xs">@yield('breadcrumb', '')</p>
             </div>
-        </header>
+        </div>
 
         <div class="px-6 py-6 md:px-8 md:py-8">
             @if (session('success'))
@@ -100,7 +96,7 @@
 
     const sidebar = document.getElementById('sidebar');
     const backdrop = document.getElementById('sidebar-backdrop');
-    const toggleButton = document.getElementById('sidebar-toggle');
+    const toggleButton = document.getElementById('sidebarToggle');
 
     const isDesktop = () => window.innerWidth >= 768;
 
