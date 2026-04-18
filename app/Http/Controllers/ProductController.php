@@ -44,6 +44,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        \URL::forceScheme('https');
         $data = $this->validateProduct($request);
 
         $data['transport_fees'] = $data['transport_fees'] ?? 0;
@@ -67,6 +68,7 @@ class ProductController extends Controller
 
     public function update(Request $request, int $id)
     {
+        \URL::forceScheme('https');
         $product = Product::findOrFail($id);
         $data = $this->validateProduct($request);
 
@@ -147,4 +149,3 @@ class ProductController extends Controller
         ]);
     }
 }
-

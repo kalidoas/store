@@ -10,7 +10,7 @@
 @endphp
 
 <div class="grid gap-6 lg:grid-cols-3">
-    <form method="POST" action="{{ route('products.update', $product->id) }}" class="rounded-[12px] bg-white p-6 shadow lg:col-span-2">
+    <form method="POST" action="{{ secure_url('/products/' . $product->id) }}">
         @csrf
         @method('PUT')
         <div class="grid gap-4 md:grid-cols-2">
@@ -31,27 +31,27 @@
             </div>
             <div>
                 <label class="text-sm font-semibold">Quantité</label>
-                <input type="number" name="quantity" min="0" value="{{ old('quantity', $product->quantity) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="quantity">
+                <input type="number" name="quantity" min="0" step="1" oninput="this.value=this.value.replace(/^0+(?=\d)/, '')" value="{{ old('quantity', $product->quantity) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="quantity">
                 @error('quantity')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
             </div>
             <div>
                 <label class="text-sm font-semibold">Prix achat (par pièce)</label>
-                <input type="number" step="0.01" min="0" name="purchase_price" value="{{ old('purchase_price', $product->purchase_price) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="purchase_price">
+                <input type="number" step="any" min="0" oninput="this.value=this.value.replace(/^0+(?=\d)/, '')" name="purchase_price" value="{{ old('purchase_price', $product->purchase_price) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="purchase_price">
                 @error('purchase_price')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
             </div>
             <div>
                 <label class="text-sm font-semibold">Frais transport Casa→Berrechid</label>
-                <input type="number" step="0.01" min="0" name="transport_fees" value="{{ old('transport_fees', $product->transport_fees) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="transport_fees">
+                <input type="number" step="any" min="0" oninput="this.value=this.value.replace(/^0+(?=\d)/, '')" name="transport_fees" value="{{ old('transport_fees', $product->transport_fees) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="transport_fees">
                 @error('transport_fees')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
             </div>
             <div>
                 <label class="text-sm font-semibold">Autres frais</label>
-                <input type="number" step="0.01" min="0" name="other_fees" value="{{ old('other_fees', $product->other_fees) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="other_fees">
+                <input type="number" step="any" min="0" oninput="this.value=this.value.replace(/^0+(?=\d)/, '')" name="other_fees" value="{{ old('other_fees', $product->other_fees) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="other_fees">
                 @error('other_fees')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
             </div>
             <div>
                 <label class="text-sm font-semibold">Prix de vente</label>
-                <input type="number" step="0.01" min="0" name="selling_price" value="{{ old('selling_price', $product->selling_price) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="selling_price">
+                <input type="number" step="any" min="0" oninput="this.value=this.value.replace(/^0+(?=\d)/, '')" name="selling_price" value="{{ old('selling_price', $product->selling_price) }}" class="mt-1 w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm" id="selling_price">
                 @error('selling_price')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
             </div>
             <div class="md:col-span-2">
