@@ -20,6 +20,7 @@ class Product extends Model
         'other_fees',
         'selling_price',
         'notes',
+        'image',
     ];
 
     protected $casts = [
@@ -102,6 +103,13 @@ class Product extends Model
                 return 'available';
             }
         );
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        return $this->image
+            ? asset('storage/' . $this->image)
+            : 'https://placehold.co/48x48/f3f4f6/9ca3af?text=?';
     }
 }
 

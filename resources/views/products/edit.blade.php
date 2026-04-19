@@ -10,7 +10,7 @@
 @endphp
 
 <div class="grid gap-6 lg:grid-cols-3">
-    <form method="POST" action="{{ secure_url('/products/' . $product->id) }}">
+    <form method="POST" action="{{ secure_url('/products/' . $product->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="grid gap-4 md:grid-cols-2">
@@ -61,6 +61,23 @@
             </div>
         </div>
 
+        <div class="mt-4">
+            <label class="text-sm font-semibold">Photo du produit</label>
+            <div class="mt-1 border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 transition" onclick="document.getElementById('imageInput').click()">
+                @if($product->image)
+                    <img id="imagePreview" src="{{ $product->image_url }}" class="mx-auto mb-3 rounded-lg object-cover" style="max-height:160px">
+                @else
+                    <img id="imagePreview" src="" alt="" class="hidden mx-auto mb-3 rounded-lg object-cover" style="max-height:160px">
+                @endif
+                <svg id="uploadIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-2 text-gray-400" width="40" height="40">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+                <p id="uploadText" class="text-sm text-gray-500">Cliquez pour ajouter une photo</p>
+                <p class="text-xs text-gray-400 mt-1">PNG, JPG jusqu'à 2MB</p>
+            </div>
+            <input type="file" id="imageInput" name="image" accept="image/*" class="hidden" onchange="previewImage(this)">
+        </div>
+
         <div class="mt-6 flex gap-3">
             <a href="{{ route('products.index') }}" class="rounded-lg border border-[#E5E7EB] px-4 py-2 text-sm font-semibold">Annuler</a>
             <button type="submit" class="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">Mettre à jour</button>
@@ -80,6 +97,19 @@
 </div>
 
 <script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreview').classList.remove('hidden');
+                document.getElementById('uploadIcon').classList.add('hidden');
+                document.getElementById('uploadText').textContent = input.files[0].name;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     const fields = {
         purchase_price: document.getElementById('purchase_price'),
         quantity: document.getElementById('quantity'),

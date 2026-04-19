@@ -30,6 +30,7 @@
             <table class="min-w-full text-sm">
                 <thead class="text-left text-[#6B7280]">
                 <tr>
+                    <th class="pb-3">Image</th>
                     <th class="pb-3">Produit</th>
                     <th class="pb-3">Quantité</th>
                     <th class="pb-3 hidden md:table-cell">Prix achat</th>
@@ -49,6 +50,11 @@
                         $statusClass = $product->stock_status === 'available' ? 'bg-green-50 text-green-600' : ($product->stock_status === 'low_stock' ? 'bg-orange-50 text-orange-600' : 'bg-red-50 text-red-600');
                     @endphp
                     <tr data-product-row="{{ $product->id }}">
+                        <td class="py-4">
+                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                 class="w-12 h-12 rounded-lg object-cover border border-gray-200"
+                                 onerror="this.src='https://placehold.co/48x48/f3f4f6/9ca3af?text=?'">
+                        </td>
                         <td class="py-4">
                             <div class="font-semibold">{{ $product->name }}</div>
                             <div class="mt-1 inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-[#2563EB]">

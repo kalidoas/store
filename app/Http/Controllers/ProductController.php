@@ -45,12 +45,16 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         \URL::forceScheme('https');
-        $data = $this->validateProduct($request);
+        $validated = $this->validateProduct($request);
 
-        $data['transport_fees'] = $data['transport_fees'] ?? 0;
-        $data['other_fees'] = $data['other_fees'] ?? 0;
+        $validated['transport_fees'] = $validated['transport_fees'] ?? 0;
+        $validated['other_fees'] = $validated['other_fees'] ?? 0;
 
-        Product::create($data);
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        Product::create($validated);
 
         return redirect()->route('products.index')
             ->with('success', 'Produit ajouté avec succès.');
@@ -70,12 +74,19 @@ class ProductController extends Controller
     {
         \URL::forceScheme('https');
         $product = Product::findOrFail($id);
-        $data = $this->validateProduct($request);
+        $validated = $this->validateProduct($request);
 
-        $data['transport_fees'] = $data['transport_fees'] ?? 0;
-        $data['other_fees'] = $data['other_fees'] ?? 0;
+        $validated['transport_fees'] = $validated['transport_fees'] ?? 0;
+        $validated['other_fees'] = $validated['other_fees'] ?? 0;
 
-        $product->update($data);
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                \Storage::disk('public')->delete($product->image);
+            }
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($validated);
 
         return redirect()->route('products.index')
             ->with('success', 'Produit mis à jour avec succès.');
@@ -84,6 +95,11 @@ class ProductController extends Controller
     public function destroy(int $id)
     {
         $product = Product::findOrFail($id);
+
+        if ($product->image) {
+            \Storage::disk('public')->delete($product->image);
+        }
+
         $product->delete();
 
         return redirect()->route('products.index')
